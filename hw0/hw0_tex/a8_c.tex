@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A8(c)}
+
+We start with the following property of an invertible matrix:
+\[
+B B^{-1} = I,
+\]
+where \( I \) is the identity matrix.
+
+Taking the transpose of both sides:
+\[
+(B B^{-1})^\top = I^\top.
+\]
+
+Using the property of transposes for matrix multiplication, \( (AB)^\top = B^\top A^\top \), this becomes:
+\[
+(B^{-1})^\top B^\top = I^\top.
+\]
+
+Since the transpose of the identity matrix is itself (\( I^\top = I \)), we have:
+\[
+(B^{-1})^\top B^\top = I.
+\]
+
+Because \( B \) is symmetric, \( B^\top = B \), so:
+\[
+(B^{-1})^\top B = I.
+\]
+
+By the definition of the inverse, this implies:
+\[
+(B^{-1})^\top = B^{-1}.
+\]
+
+Thus, \( B^{-1} \) is symmetric.
+
+\hfill\(\blacksquare\)
+
+\end{document}

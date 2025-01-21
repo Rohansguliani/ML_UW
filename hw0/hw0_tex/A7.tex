@@ -1,0 +1,84 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A7}
+
+\subsection*{(a)}
+We expand \(f(x, y)\) as:
+\[
+f(x, y) = \sum_{i=1}^n \sum_{j=1}^n A_{ij} x_i x_j + \sum_{i=1}^n \sum_{j=1}^n B_{ij} y_i x_j + c.
+\]
+
+\subsection*{(b)}
+The gradient of \(f(x, y)\) with respect to \(x\) is given by:
+\[
+\nabla_x f(x, y) = \begin{bmatrix}
+\frac{\partial f}{\partial x_1} \\
+\frac{\partial f}{\partial x_2} \\
+\vdots \\
+\frac{\partial f}{\partial x_n}
+\end{bmatrix}
+= 2A x + B^\top y.
+\]
+
+In summation form, the \(k\)-th component of the gradient is:
+\[
+\frac{\partial f}{\partial x_k} = 2 \sum_{j=1}^n A_{kj} x_j + \sum_{i=1}^n B_{ik} y_i.
+\]
+
+This is derived as follows:
+\begin{align*}
+\text{For the first term: } & \quad 
+x^\top A x = \sum_{i=1}^n \sum_{j=1}^n A_{ij} x_i x_j. \\
+& \text{When we take } \frac{\partial}{\partial x_k}, \text{ only terms where } i = k \text{ or } j = k \text{ contribute.} \\
+& \text{If } i = k, \text{ the term becomes } A_{kj} x_k x_j, \text{ and } \frac{\partial}{\partial x_k}(A_{kj} x_k x_j) = A_{kj} x_j. \\
+& \text{If } j = k, \text{ the term becomes } A_{ik} x_i x_k, \text{ and } \frac{\partial}{\partial x_k}(A_{ik} x_i x_k) = A_{ik} x_i. \\
+& \text{Adding these contributions gives: } 2 \sum_{j=1}^n A_{kj} x_j. \\[10pt]
+\text{For the second term: } & \quad 
+y^\top B x = \sum_{i=1}^n \sum_{j=1}^n B_{ij} y_i x_j. \\
+& \text{When we take } \frac{\partial}{\partial x_k}, \text{ only terms where } j = k \text{ contribute.} \\
+& \text{If } j = k, \text{ the term becomes } B_{ik} y_i x_k, \text{ and } \frac{\partial}{\partial x_k}(B_{ik} y_i x_k) = B_{ik} y_i. \\
+& \text{This gives: } \sum_{i=1}^n B_{ik} y_i. \\[10pt]
+\text{For the third term: } & \quad 
+c \text{ is a constant, so } \frac{\partial}{\partial x_k} c = 0. \\[10pt]
+\text{Combining these results: } & \quad 
+\frac{\partial f}{\partial x_k} = 2 \sum_{j=1}^n A_{kj} x_j + \sum_{i=1}^n B_{ik} y_i.
+\end{align*}
+
+\subsection*{(c)}
+The gradient of \(f(x, y)\) with respect to \(y\) is given by:
+\[
+\nabla_y f(x, y) = \begin{bmatrix}
+\frac{\partial f}{\partial y_1} \\
+\frac{\partial f}{\partial y_2} \\
+\vdots \\
+\frac{\partial f}{\partial y_n}
+\end{bmatrix}
+= B x.
+\]
+
+In summation form, the \(k\)-th component of the gradient is:
+\[
+\frac{\partial f}{\partial y_k} = \sum_{j=1}^n B_{kj} x_j.
+\]
+
+This is derived as follows:
+\begin{align*}
+\text{For the first term: } & \quad 
+x^\top A x = \sum_{i=1}^n \sum_{j=1}^n A_{ij} x_i x_j. \\
+& \text{This term does not involve } y, \text{ so } \frac{\partial}{\partial y_k}(x^\top A x) = 0. \\[10pt]
+\text{For the second term: } & \quad 
+y^\top B x = \sum_{i=1}^n \sum_{j=1}^n B_{ij} y_i x_j. \\
+& \text{When we take } \frac{\partial}{\partial y_k}, \text{ only terms where } i = k \text{ contribute.} \\
+& \text{If } i = k, \text{ the term becomes } B_{kj} y_k x_j, \text{ and } \frac{\partial}{\partial y_k}(B_{kj} y_k x_j) = B_{kj} x_j. \\
+& \text{This gives: } \sum_{j=1}^n B_{kj} x_j. \\[10pt]
+\text{For the third term: } & \quad 
+c \text{ is a constant, so } \frac{\partial}{\partial y_k} c = 0. \\[10pt]
+\text{Combining these results: } & \quad 
+\frac{\partial f}{\partial y_k} = \sum_{j=1}^n B_{kj} x_j.
+\end{align*}
+
+\end{document}

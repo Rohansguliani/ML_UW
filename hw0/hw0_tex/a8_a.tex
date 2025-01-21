@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A8(a)}
+
+We are given that:
+\[
+\text{diag}(v) 
+\,=\, 
+\begin{bmatrix}
+v_1 & 0 & \cdots & 0 \\
+0 & v_2 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & v_n
+\end{bmatrix}
+\quad \text{and} \quad
+\text{diag}(w) 
+\,=\, 
+\begin{bmatrix}
+w_1 & 0 & \cdots & 0 \\
+0 & w_2 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & w_n
+\end{bmatrix}.
+\]
+
+If we assume that \( \text{diag}(v)^{-1} = \text{diag}(w) \), it follows that:
+\[
+w_i = \frac{1}{v_i}, \quad \forall i \in \{1, 2, \ldots, n\}.
+\]
+
+We are also given that \( g(v_i) = w_i \), so substituting the relationship between \( v_i \) and \( w_i \), we find:
+\[
+g(v_i) = \frac{1}{v_i}.
+\]
+\hfill\(\blacksquare\)
+
+\end{document}

@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A1}
+
+\quad Define the probabilities:
+\[
+P(D) = \text{The probability of having the disease},
+\]
+\[
+P(\text{Positive}) = \text{The probability of testing positive}.
+\]
+
+Using Bayes' Theorem:
+\[
+P(D \mid \text{Positive}) = \frac{P(\text{Positive} \mid D) P(D)}{P(\text{Positive})}.
+\]
+
+Known probabilities:
+\[
+P(D) = 0.0001,
+\]
+\[
+P(\neg D) = 0.9999,
+\]
+\[
+P(\text{Positive} \mid D) = 0.99,
+\]
+\[
+P(\text{Positive} \mid \neg D) = 0.01.
+\]
+
+Calculate \( P(\text{Positive}) \):
+\[
+P(\text{Positive}) = P(\text{Positive} \mid D) P(D) + P(\text{Positive} \mid \neg D) P(\neg D).
+\]
+\[
+P(\text{Positive}) = (0.99)(0.0001) + (0.01)(0.9999).
+\]
+\[
+P(\text{Positive}) = 0.000099 + 0.009999 = 0.010098.
+\]
+
+Calculate \( P(D \mid \text{Positive}) \):
+\[
+P(D \mid \text{Positive}) = \frac{(0.99)(0.0001)}{0.010098}.
+\]
+\[
+P(D \mid \text{Positive}) = \frac{0.000099}{0.010098}.
+\]
+\[
+P(D \mid \text{Positive}) \approx 0.0098.
+\]
+
+Final result:
+\[
+P(D \mid \text{Positive}) \approx 0.98\%.
+\]
+\end{document}
