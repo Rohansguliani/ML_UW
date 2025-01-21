@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{Question A2}
+\subsection*{(a)}
+
+\quad Since $\mathbb{E}[Y] = \mathbb{E}[\mathbb{E}[Y \mid X]]$ (by the Law of Total Expectation), we know:
+\[
+    \mathbb{E}[Y \mid X] = X \implies \mathbb{E}[Y] = \mathbb{E}[X].
+\]
+
+By the definition of covariance:
+\[
+    \text{Cov}(X, Y) = \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])].
+\]
+
+Expanding this out:
+\[
+    \text{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X] \cdot \mathbb{E}[Y].
+\]
+
+Substituting $\mathbb{E}[Y \mid X] = X$, we get:
+\[
+    \text{Cov}(X, Y) = \mathbb{E}[X \cdot X] - \mathbb{E}[X] \cdot \mathbb{E}[X].
+\]
+
+This simplifies to:
+\[
+    \text{Cov}(X, Y) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2.
+\]
+
+Now, using the expansion:
+\[
+    \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = \mathbb{E}[(X - \mathbb{E}[X])^2].
+\]
+
+Thus:
+\[
+    \text{Cov}(X, Y) = \mathbb{E}[(X - \mathbb{E}[X])^2].
+\]
+
+\hfill\(\blacksquare\)
+
+\end{document}

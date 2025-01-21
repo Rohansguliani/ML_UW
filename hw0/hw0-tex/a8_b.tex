@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A8(b)}
+
+By definition, the squared Euclidean norm of \( A x \) is:
+\[
+\|A x\|_2^2 = (A x)^\top (A x).
+\]
+
+Using the associative property of matrix multiplication:
+\[
+(A x)^\top (A x) = x^\top (A^\top A) x.
+\]
+
+Since \( A \) is orthonormal, it satisfies \( A^\top A = I \), where \( I \) is the identity matrix:
+\[
+x^\top (A^\top A) x = x^\top I x = x^\top x.
+\]
+
+The expression \( x^\top x \) is exactly the squared Euclidean norm of \( x \), so:
+\[
+\|A x\|_2^2 = \|x\|_2^2.
+\]
+
+Thus, we have shown that:
+\[
+\|A x\|_2^2 = \|x\|_2^2. \quad
+\]
+\hfill\(\blacksquare\)
+
+
+\end{document}

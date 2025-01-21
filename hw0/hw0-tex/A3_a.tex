@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A3(a)}
+
+We know:
+\[
+P(Z \leq z) = P(X + Y \leq z) = P(Y \leq z - X).
+\]
+
+We can marginalize over \( X \):
+\[
+P(Z \leq z) = \int_{-\infty}^\infty P(Y \leq z - x) f(x) \, dx.
+\]
+
+Now, let \( G(y) \) denote the CDF of \( Y \). Then:
+\[
+P(Y \leq z - x) = G(z - x).
+\]
+
+Substituting this into \( P(Z \leq z) \):
+\[
+P(Z \leq z) = \int_{-\infty}^\infty G(z - x) f(x) \, dx. \tag{1}
+\]
+
+From the Fundamental Theorem of Calculus:
+\[
+\frac{d}{dz} G(z - x) = g(z - x),
+\]
+where \( g(y) \) is the PDF of \( Y \). This works because the derivative of the CDF \( G(y) \) with respect to its variable yields the PDF \( g(y) \), which represents the rate of change of the cumulative probability.
+
+Differentiating \( P(Z \leq z) \) using (1):
+\[
+h(z) = \frac{d}{dz} P(Z \leq z) = \frac{d}{dz} \int_{-\infty}^\infty G(z - x) f(x) \, dx.
+\]
+
+By the chain rule and the Fundamental Theorem of Calculus:
+\[
+h(z) = \int_{-\infty}^\infty g(z - x) f(x) \, dx.
+\]
+
+Thus:
+\[
+h(z) = \int_{-\infty}^\infty f(x) g(z - x) \, dx.
+\]
+
+\hfill\(\blacksquare\)
+
+\end{document}

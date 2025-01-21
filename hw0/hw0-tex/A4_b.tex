@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A4(b)}
+
+\subsection*{Mean}
+Let \( Z = X_1 + 2X_2 \). Then, by the linearity of expectation:
+\[
+\mathbb{E}[Z] = \mathbb{E}[X_1 + 2X_2] = \mathbb{E}[X_1] + 2\mathbb{E}[X_2].
+\]
+Since \( \mathbb{E}[X_1] = \mu \) and \( \mathbb{E}[X_2] = \mu \), we have:
+\[
+\mathbb{E}[Z] = \mu + 2\mu = 3\mu.
+\]
+
+\subsection*{Variance}
+The variance of \( Z \) is:
+\[
+\text{Var}(Z) = \text{Var}(X_1 + 2X_2).
+\]
+Using the variance properties for linear combinations:
+\[
+\text{Var}(Z) = \text{Var}(X_1) + 2^2 \text{Var}(X_2).
+\]
+Since \( \text{Var}(X_1) = \sigma^2 \) and \( \text{Var}(X_2) = \sigma^2 \), this becomes:
+\[
+\text{Var}(Z) = \sigma^2 + 4\sigma^2 = 5\sigma^2.
+\]
+
+\subsection*{Final Results}
+\begin{itemize}
+    \item \textbf{Mean:}
+    \[
+    \mathbb{E}[Z] = 3\mu.
+    \]
+    \item \textbf{Variance:}
+    \[
+    \text{Var}(Z) = 5\sigma^2.
+    \]
+\end{itemize}
+
+\hfill\(\blacksquare\)
+
+\end{document}

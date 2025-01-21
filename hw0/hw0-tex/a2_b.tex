@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{Question A2}
+\subsection*{(b)}
+
+We know that $\text{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X] \cdot \mathbb{E}[Y]$. To show $\text{Cov}(X, Y) = 0$, we need to prove:
+\[
+\mathbb{E}[XY] = \mathbb{E}[X] \cdot \mathbb{E}[Y].
+\]
+
+By the definition of expectation of the joint PDF:
+\[
+\mathbb{E}[XY] = \int_{-\infty}^\infty \int_{-\infty}^\infty xy f_{X,Y}(x, y) \, dx \, dy.
+\]
+
+Using independence:
+\[
+f_{X,Y}(x, y) = f_X(x) f_Y(y).
+\]
+
+Substituting this into the expression for $\mathbb{E}[XY]$, we have:
+\[
+\mathbb{E}[XY] = \int_{-\infty}^\infty \int_{-\infty}^\infty xy f_X(x) f_Y(y) \, dx \, dy.
+\]
+
+The double integral can be separated:
+\[
+\mathbb{E}[XY] = \left( \int_{-\infty}^\infty x f_X(x) \, dx \right) \cdot \left( \int_{-\infty}^\infty y f_Y(y) \, dy \right).
+\]
+
+The first term is $\mathbb{E}[X]$, and the second term is $\mathbb{E}[Y]$. Thus:
+\[
+\mathbb{E}[XY] = \mathbb{E}[X] \cdot \mathbb{E}[Y].
+\]
+
+Therefore:
+\[
+\text{Cov}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X] \cdot \mathbb{E}[Y] = 0.
+\]
+
+\hfill\(\blacksquare\)
+
+\end{document}
