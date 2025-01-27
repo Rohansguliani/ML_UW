@@ -1,0 +1,95 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A2(a)}
+
+First, we find the likelihood function of the parameter \( \lambda \) for the given data. Let \( x_1, x_2, \dots, x_n \) represent the observed goal counts for \( n \) games, where the number of goals in each game follows a Poisson distribution with parameter \( \lambda \). The probability mass function for a single observation is:
+\[
+P(x_i \mid \lambda) = \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}.
+\]
+
+Since the observations are independent, the likelihood function for the entire dataset is the product of the probabilities:
+\[
+L(\lambda) = \prod_{i=1}^n P(x_i \mid \lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}.
+\]
+
+Next, we take the natural logarithm of the likelihood function to simplify the optimization process. The log-likelihood function is:
+\[
+\log L(\lambda) = \log \left( \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \right).
+\]
+
+Expanding the logarithm of the product:
+\[
+\log L(\lambda) = \sum_{i=1}^n \log \left( \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \right).
+\]
+
+Now, apply the logarithm of a quotient:
+\[
+\log \left( \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \right) = \log \left( \lambda^{x_i} e^{-\lambda} \right) - \log(x_i!).
+\]
+
+For the term \( \log \left( \lambda^{x_i} e^{-\lambda} \right) \), apply the logarithm of a product:
+\[
+\log \left( \lambda^{x_i} e^{-\lambda} \right) = \log \left( \lambda^{x_i} \right) + \log \left( e^{-\lambda} \right).
+\]
+
+Simplify each term:
+1. \( \log \left( \lambda^{x_i} \right) = x_i \log \lambda \),
+2. \( \log \left( e^{-\lambda} \right) = -\lambda \).
+
+Substitute these back:
+\[
+\log \left( \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \right) = x_i \log \lambda - \lambda - \log(x_i!).
+\]
+
+Combining everything:
+\[
+\log L(\lambda) = \sum_{i=1}^n \left( x_i \log \lambda - \lambda - \log x_i! \right).
+\]
+
+To find the maximum likelihood estimate of \( \lambda \), we differentiate \( \log L(\lambda) \) with respect to \( \lambda \):
+\[
+\frac{\partial}{\partial \lambda} \log L(\lambda) = \frac{\partial}{\partial \lambda} \left( \sum_{i=1}^n x_i \log \lambda - \sum_{i=1}^n \lambda - \sum_{i=1}^n \log x_i! \right).
+\]
+
+Taking derivatives term by term:
+\[
+\frac{\partial}{\partial \lambda} \log L(\lambda) = \sum_{i=1}^n \frac{x_i}{\lambda} - \sum_{i=1}^n 1 + \frac{\partial}{\partial \lambda} \left( -\sum_{i=1}^n \log x_i! \right).
+\]
+
+Since \( \sum_{i=1}^n \log x_i! \) does not depend on \( \lambda \), its derivative is zero:
+\[
+\frac{\partial}{\partial \lambda} \log L(\lambda) = \sum_{i=1}^n \frac{x_i}{\lambda} - n.
+\]
+
+Set the derivative equal to zero:
+\[
+\sum_{i=1}^n \frac{x_i}{\lambda} - n = 0.
+\]
+
+Rearranging:
+\[
+\frac{\sum_{i=1}^n x_i}{\lambda} = n.
+\]
+
+Multiply through by \( \lambda \):
+\[
+\sum_{i=1}^n x_i = n\lambda.
+\]
+
+Solve for \( \lambda \):
+\[
+\lambda = \frac{\sum_{i=1}^n x_i}{n}.
+\]
+
+Thus, the maximum likelihood estimate for \( \lambda \) is:
+\[
+\hat{\lambda} = \frac{1}{n} \sum_{i=1}^n x_i.
+\]
+
+\hfill\(\blacksquare\)
+
+\end{document}

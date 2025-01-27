@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage{amsmath} % For mathematical symbols and align environment
+\usepackage{amssymb} % For additional symbols
+
+\begin{document}
+
+\section*{A2(b)}
+
+To find the numerical estimate of \( \lambda \), we use the maximum likelihood estimate:
+\[
+\hat{\lambda} = \frac{1}{n} \sum_{i=1}^n x_i.
+\]
+
+The number of goals in the first five games is given as \( [2, 4, 6, 0, 1] \). Substituting these values:
+\[
+\hat{\lambda} = \frac{2 + 4 + 6 + 0 + 1}{5} = \frac{13}{5} = 2.6.
+\]
+
+Thus, the estimated \( \lambda \) is:
+\[
+\hat{\lambda} = 2.6.
+\]
+
+Next, we calculate the probability that the team scores 6 goals in their next game. The number of goals per game follows a Poisson distribution, with probability mass function:
+\[
+P(X = x \mid \lambda) = \frac{\lambda^x e^{-\lambda}}{x!}.
+\]
+
+Substituting \( x = 6 \) and \( \lambda = 2.6 \):
+\[
+P(X = 6 \mid \lambda = 2.6) = \frac{2.6^6 e^{-2.6}}{6!}.
+\]
+
+We compute this step by step:
+1. Compute \( 2.6^6 \):
+\[
+2.6^6 = 308.915776.
+\]
+
+2. Compute \( e^{-2.6} \):
+\[
+e^{-2.6} \approx 0.07427.
+\]
+
+3. Compute \( 6! \):
+\[
+6! = 720.
+\]
+
+Substitute these values back:
+\[
+P(X = 6 \mid \lambda = 2.6) = \frac{308.915776 \cdot 0.07427}{720}.
+\]
+
+Simplify:
+\[
+P(X = 6 \mid \lambda = 2.6) \approx \frac{22.93885}{720} \approx 0.03187.
+\]
+
+Thus, the probability that the team scores 6 goals in their next game is approximately:
+\[
+P(X = 6 \mid \lambda = 2.6) \approx 0.03187 \quad \text{(3.187\%)}.
+\]
+
+\hfill\(\blacksquare\)
+
+\end{document}
