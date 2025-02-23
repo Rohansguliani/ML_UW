@@ -12,9 +12,10 @@ def compile_tex_to_pdf(tex_folder, results_folder):
         results_folder (str): Path to the folder to store compiled PDF files.
         
     Returns:
-        list: List of compiled PDF file paths.
+        tuple: (list of compiled PDF file paths, bool indicating if any errors occurred)
     """
     pdf_files = []
+    has_errors = False  # Flag to track if any compilation errors occurred
     
     # Ensure the input folder exists
     if not os.path.isdir(tex_folder):
@@ -34,7 +35,7 @@ def compile_tex_to_pdf(tex_folder, results_folder):
                 # Run pdflatex to compile the .tex file
                 result = subprocess.run(
                     ['pdflatex', '-interaction=nonstopmode', tex_file_path],
-                    cwd=results_folder,  # Set results folder as the working directory
+                    cwd=tex_folder,  # Set results folder as the working directory
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE
                 )
@@ -46,10 +47,11 @@ def compile_tex_to_pdf(tex_folder, results_folder):
                     print(f"Failed to compile: {file_name}")
                     print("Error Output:")
                     print(result.stderr.decode('utf-8'))  # Print the error details
+                    has_errors = True  # Set error flag
             except FileNotFoundError:
                 raise EnvironmentError("Error: pdflatex is not installed or not in PATH.")
     
-    return pdf_files
+    return pdf_files, has_errors
 
 def merge_pdfs(pdf_files, output_pdf):
     """
@@ -83,7 +85,7 @@ def compile_and_merge_tex(tex_folder, output_pdf):
     print(f"Compiling PDFs into folder: {results_folder}")
     
     # Step 1: Compile .tex files to PDFs
-    pdf_files = compile_tex_to_pdf(tex_folder, results_folder)
+    pdf_files, has_errors = compile_tex_to_pdf(tex_folder, results_folder)
     
     if not pdf_files:
         print("No PDFs were generated. Ensure there are .tex files in the folder.")
@@ -91,6 +93,12 @@ def compile_and_merge_tex(tex_folder, output_pdf):
     
     # Step 2: Merge all compiled PDFs into a single PDF
     merge_pdfs(pdf_files, output_pdf)
+    
+    # Step 3: Print final status
+    if has_errors:
+        print("Finished with errors.")
+    else:
+        print("Everything worked!")
 
 if __name__ == "__main__":
     # Set up argument parsing
