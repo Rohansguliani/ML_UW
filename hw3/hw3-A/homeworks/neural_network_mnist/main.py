@@ -1,7 +1,7 @@
 # When taking sqrt for initialization you might want to use math package,
 # since torch.sqrt requires a tensor, and math.sqrt is ok with integer
 import math
-from typing import List
+from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 import torch
@@ -26,7 +26,14 @@ class F1(Module):
             k (int): Output dimension/number of classes.
         """
         super().__init__()
-        raise NotImplementedError("Your Code Goes Here")
+
+        alpha_0 = 1 / math.sqrt(d)
+        self.W0 = Parameter(Uniform(-alpha_0, alpha_0).sample((d, h)))
+        self.b0 = Parameter(Uniform(-alpha_0, alpha_0).sample((h,)))
+
+        alpha_1 = 1 / math.sqrt(h)
+        self.W1 = Parameter(Uniform(-alpha_1, alpha_1).sample((h, k)))
+        self.b1 = Parameter(Uniform(-alpha_1, alpha_1).sample((k,)))
 
     @problem.tag("hw3-A")
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -48,7 +55,11 @@ class F1(Module):
         Returns:
             torch.Tensor: FloatTensor of shape (n, k). Prediction.
         """
-        raise NotImplementedError("Your Code Goes Here")
+        # First layer
+        hidden = relu(x @ self.W0 + self.b0)
+        # Second layer
+        output = hidden @ self.W1 + self.b1
+        return output
 
 
 class F2(Module):
@@ -63,7 +74,16 @@ class F2(Module):
             k (int): Output dimension/number of classes.
         """
         super().__init__()
-        raise NotImplementedError("Your Code Goes Here")
+
+        alpha_0 = 1 / math.sqrt(d)
+        self.W0 = Parameter(Uniform(-alpha_0, alpha_0).sample((d, h0)))
+        self.b0 = Parameter(Uniform(-alpha_0, alpha_0).sample((h0,)))
+        alpha_1 = 1 / math.sqrt(h0)
+        self.W1 = Parameter(Uniform(-alpha_1, alpha_1).sample((h0, h1)))
+        self.b1 = Parameter(Uniform(-alpha_1, alpha_1).sample((h1,)))
+        alpha_2 = 1 / math.sqrt(h1)
+        self.W2 = Parameter(Uniform(-alpha_2, alpha_2).sample((h1, k)))
+        self.b2 = Parameter(Uniform(-alpha_2, alpha_2).sample((k,)))
 
     @problem.tag("hw3-A")
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -85,7 +105,39 @@ class F2(Module):
         Returns:
             torch.Tensor: FloatTensor of shape (n, k). Prediction.
         """
-        raise NotImplementedError("Your Code Goes Here")
+        hidden1 = relu(x @ self.W0 + self.b0)
+        hidden2 = relu(hidden1 @ self.W1 + self.b1)
+        output = hidden2 @ self.W2 + self.b2
+        return output
+    
+def run_model(
+    model: Module,
+    optimizer: Adam,
+    train_loader: DataLoader,
+    test_loader: DataLoader,
+    model_name: str,
+) -> Tuple[List[float], float, float, int]:
+    losses = train(model, optimizer, train_loader)
+    plt.plot(losses, label=f"{model_name} Training Loss")
+    model.eval()
+    correct = 0
+    total = 0
+    total_loss = 0.0
+    with torch.no_grad():
+        for x, y in test_loader:
+            outputs = model(x)
+            loss = cross_entropy(outputs, y)
+            total_loss += loss.item()
+            predictions = outputs.argmax(dim=1)
+            correct += (predictions == y).sum().item()
+            total += y.size(0)
+    test_accuracy = correct / total
+    test_loss = total_loss / len(test_loader)
+    total_params = sum(p.numel() for p in model.parameters())
+    print(f"{model_name} Test Accuracy: {test_accuracy:.4f}")
+    print(f"{model_name} Test Loss: {test_loss:.4f}")
+    print(f"{model_name} Total Parameters: {total_params}")
+    return losses, test_accuracy, test_loss, total_params
 
 
 @problem.tag("hw3-A")
@@ -104,7 +156,28 @@ def train(model: Module, optimizer: Adam, train_loader: DataLoader) -> List[floa
     Returns:
         List[float]: List containing average loss for each epoch.
     """
-    raise NotImplementedError("Your Code Goes Here")
+    losses = []
+    for epoch in range(100):
+        total_loss = 0.0
+        correct = 0
+        total = 0
+        for x, y in train_loader:
+            optimizer.zero_grad()
+            outputs = model(x)
+            loss = cross_entropy(outputs, y)
+            total_loss += loss.item()
+            loss.backward()
+            optimizer.step()
+            predictions = outputs.argmax(dim=1)
+            correct += (predictions == y).sum().item()
+            total += y.size(0)
+        avg_loss = total_loss / len(train_loader)
+        losses.append(avg_loss)
+        accuracy = correct / total
+        print(f"Epoch {epoch + 1}: Loss = {avg_loss:.4f}, Accuracy = {accuracy:.4f}")
+        if accuracy >= 0.99:
+            break
+    return losses
 
 
 @problem.tag("hw3-A", start_line=5)
@@ -125,7 +198,25 @@ def main():
     y = torch.from_numpy(y).long()
     x_test = torch.from_numpy(x_test).float()
     y_test = torch.from_numpy(y_test).long()
-    raise NotImplementedError("Your Code Goes Here")
+
+    train_loader = DataLoader(TensorDataset(x, y), batch_size=64, shuffle=True)
+    test_loader = DataLoader(TensorDataset(x_test, y_test), batch_size=64)
+
+    d, h, k = 784, 64, 10
+    model_f1 = F1(h=h, d=d, k=k)
+    optimizer_f1 = Adam(model_f1.parameters(), lr=0.001)
+    #run_model(model_f1, optimizer_f1, train_loader, test_loader, "F1")
+
+    d, h0, h1, k = 784, 128, 64, 10
+    model_f2 = F2(h0=h0, h1=h1, d=d, k=k)
+    optimizer_f2 = Adam(model_f2.parameters(), lr=0.001)
+    run_model(model_f2, optimizer_f2, train_loader, test_loader, "F2")
+
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.title("Training Loss for F2")
+    plt.legend()
+    plt.show()
 
 
 if __name__ == "__main__":

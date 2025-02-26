@@ -39,6 +39,5 @@ class SGDOptimizer(torch.optim.Optimizer):
         for group in self.param_groups:
             lr = group["lr"]
             for p in group["params"]:
-                if p.grad is None:
-                    continue
-                p.data = p.data - lr * p.grad.data
+                if p.grad is not None:
+                    p.data.sub_(lr * p.grad)

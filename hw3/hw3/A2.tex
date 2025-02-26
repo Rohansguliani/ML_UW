@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{amsmath}  % For math symbols and align environment
+\usepackage{amssymb}  % For additional symbols
+
+\begin{document}
+
+\section*{A2}
+
+We are given the infinite-dimensional feature map
+\[
+\phi(x) = \left[\frac{1}{\sqrt{0!}}e^{-x^2/2}x^0,\; \frac{1}{\sqrt{1!}}e^{-x^2/2}x^1,\; \frac{1}{\sqrt{2!}}e^{-x^2/2}x^2,\; \dots\right].
+\]
+For inputs \(x\) and \(x'\), we have
+\[
+\phi(x) = \left[\frac{e^{-x^2/2}x^0}{\sqrt{0!}},\; \frac{e^{-x^2/2}x^1}{\sqrt{1!}},\; \frac{e^{-x^2/2}x^2}{\sqrt{2!}},\; \dots\right],
+\]
+\[
+\phi(x') = \left[\frac{e^{-x'^2/2}x'^0}{\sqrt{0!}},\; \frac{e^{-x'^2/2}x'^1}{\sqrt{1!}},\; \frac{e^{-x'^2/2}x'^2}{\sqrt{2!}},\; \dots\right].
+\]
+The inner product is computed as
+\[
+\langle \phi(x), \phi(x') \rangle = \sum_{n=0}^{\infty}\left(\frac{e^{-x^2/2}x^n}{\sqrt{n!}}\right)\left(\frac{e^{-x'^2/2}x'^n}{\sqrt{n!}}\right).
+\]
+Simplifying: 
+\[
+\langle \phi(x), \phi(x') \rangle = e^{-x^2/2}e^{-x'^2/2}\sum_{n=0}^{\infty}\frac{(xx')^n}{n!} \quad
+\]
+After the expression
+\[
+\sum_{n=0}^{\infty}\frac{(xx')^n}{n!} = e^{xx'},
+\]
+(Taylor series expansion of \(e^x\)), we obtain
+\[
+\langle \phi(x), \phi(x') \rangle = e^{-x^2/2}e^{-x'^2/2}e^{xx'} = e^{-\frac{x^2+x'^2}{2}+xx'}.
+\]
+Writing \(xx'\) as a fraction with denominator 2, we have
+\[
+-\frac{x^2}{2} - \frac{x'^2}{2} + \frac{2xx'}{2} = -\frac{x^2 + x'^2 - 2xx'}{2}.
+\]
+Noting that
+\[
+x^2 + x'^2 - 2xx' = (x-x')^2,
+\]
+we obtain
+\[
+-\frac{x^2+x'^2}{2}+xx' = -\frac{(x-x')^2}{2}.
+\]
+Hence,
+\[
+\boxed{\langle \phi(x), \phi(x') \rangle = e^{-\frac{(x-x')^2}{2}}.}
+\]
+\hfill\(\blacksquare\)
+
+\end{document}

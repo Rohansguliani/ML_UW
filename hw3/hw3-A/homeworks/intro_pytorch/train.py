@@ -5,6 +5,7 @@ import torch
 from matplotlib import pyplot as plt
 from torch import nn, optim
 from torch.utils.data import DataLoader
+import copy
 
 from utils import problem
 
@@ -50,43 +51,38 @@ def train(
         - Make sure to load the model parameters corresponding to model with the best validation loss (if val_loader is provided).
             You might want to look into state_dict: https://pytorch.org/tutorials/beginner/saving_loading_models.html
     """
-    best_val_loss = float('inf')
     history = {"train": [], "val": []}
-    best_model_state = None
-
+    best_val_loss = float("inf")
+    best_state = None
     for epoch in range(epochs):
         model.train()
-        running_train_loss = 0.0
+        running_loss = 0.0
         for x_batch, y_batch in train_loader:
             optimizer.zero_grad()
-            output = model(x_batch)
-            loss = criterion(output, y_batch)
+            outputs = model(x_batch)
+            loss = criterion(outputs, y_batch)
             loss.backward()
             optimizer.step()
-            running_train_loss += loss.item()
-        avg_train_loss = running_train_loss / len(train_loader)
+            running_loss += loss.item()
+        avg_train_loss = running_loss / len(train_loader)
         history["train"].append(avg_train_loss)
-
         if val_loader is not None:
             model.eval()
             running_val_loss = 0.0
             with torch.no_grad():
                 for x_val, y_val in val_loader:
-                    output_val = model(x_val)
-                    loss_val = criterion(output_val, y_val)
+                    outputs_val = model(x_val)
+                    loss_val = criterion(outputs_val, y_val)
                     running_val_loss += loss_val.item()
             avg_val_loss = running_val_loss / len(val_loader)
             history["val"].append(avg_val_loss)
             if avg_val_loss < best_val_loss:
                 best_val_loss = avg_val_loss
-                best_model_state = model.state_dict()
-            model.train()
+                best_state = copy.deepcopy(model.state_dict())
         else:
-            history["val"].append(0.0)
-
-    if val_loader is not None and best_model_state is not None:
-        model.load_state_dict(best_model_state)
-
+            history["val"] = []
+    if val_loader is not None and best_state is not None:
+        model.load_state_dict(best_state)
     return history
 
 

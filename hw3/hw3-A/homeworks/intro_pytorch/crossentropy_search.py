@@ -60,75 +60,92 @@ def crossentropy_parameter_search(
                 }
             }
     """
-    train_loader = DataLoader(dataset_train, batch_size=8, shuffle=True)
-    val_loader = DataLoader(dataset_val, batch_size=8, shuffle=False)
-
-    lr = 0.01
-    epochs = 50
-
-    linear_model = nn.Sequential(
-        LinearLayer(2, 2),
-        SoftmaxLayer()
-    )
-
-    one_hidden_sigmoid = nn.Sequential(
-        LinearLayer(2, 2),
-        SigmoidLayer(),
-        LinearLayer(2, 2),
-        SoftmaxLayer()
-    )
-
-    one_hidden_relu = nn.Sequential(
-        LinearLayer(2, 2),
-        ReLULayer(),
-        LinearLayer(2, 2),
-        SoftmaxLayer()
-    )
-
-    two_hidden_sig_relu = nn.Sequential(
-        LinearLayer(2, 2),
-        SigmoidLayer(),
-        LinearLayer(2, 2),
-        ReLULayer(),
-        LinearLayer(2, 2),
-        SoftmaxLayer()
-    )
-
-    two_hidden_relu_sig = nn.Sequential(
-        LinearLayer(2, 2),
-        ReLULayer(),
-        LinearLayer(2, 2),
-        SigmoidLayer(),
-        LinearLayer(2, 2),
-        SoftmaxLayer()
-    )
-
-    models = {
-        "Linear": linear_model,
-        "OneHidden_Sigmoid": one_hidden_sigmoid,
-        "OneHidden_ReLU": one_hidden_relu,
-        "TwoHidden_SigmoidReLU": two_hidden_sig_relu,
-        "TwoHidden_ReLUSigmoid": two_hidden_relu_sig
-    }
-
     results = {}
+
+    lr = 0.1
+    batch_size = 16
+    epochs = 100
     criterion = CrossEntropyLossLayer()
 
-    for name, model in models.items():
-        optimizer = SGDOptimizer(model.parameters(), lr=lr)
-        history = train(
-            train_loader=train_loader,
-            model=model,
-            criterion=criterion,
-            optimizer=optimizer,
-            val_loader=val_loader,
-            epochs=epochs
-        )
-        results[name] = {
-            "train": history["train"],
-            "val": history["val"],
-            "model": model
-        }
+    train_loader = DataLoader(dataset_train, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(dataset_val, batch_size=batch_size, shuffle=False)
+
+    print("training model Linear Regression Model")
+    model1 = nn.Sequential(
+        LinearLayer(2, 2),
+        SoftmaxLayer()
+    )
+    optimizer1 = SGDOptimizer(model1.parameters(), lr=lr)
+    history1 = train(train_loader, model1, criterion, optimizer1, val_loader, epochs)
+    results["Linear Regression Model"] = {
+        "train": history1["train"],
+        "val": history1["val"],
+        "model": model1
+    }
+
+    print("training model One Hidden Layer with Sigmoid")
+    model2 = nn.Sequential(
+        LinearLayer(2, 2),
+        SigmoidLayer(),
+        LinearLayer(2, 2),
+        SoftmaxLayer()
+    )
+    optimizer2 = SGDOptimizer(model2.parameters(), lr=lr)
+    history2 = train(train_loader, model2, criterion, optimizer2, val_loader, epochs)
+    results["One Hidden Layer with Sigmoid"] = {
+        "train": history2["train"],
+        "val": history2["val"],
+        "model": model2
+    }
+
+    print("training model One Hidden Layer with ReLU")
+    model3 = nn.Sequential(
+        LinearLayer(2, 2),
+        ReLULayer(),
+        LinearLayer(2, 2),
+        SoftmaxLayer()
+    )
+    optimizer3 = SGDOptimizer(model3.parameters(), lr=lr)
+    history3 = train(train_loader, model3, criterion, optimizer3, val_loader, epochs)
+    results["One Hidden Layer with ReLU"] = {
+        "train": history3["train"],
+        "val": history3["val"],
+        "model": model3
+    }
+
+    print("training model Two Hidden Layers with Sigmoid then ReLU")
+    model4 = nn.Sequential(
+        LinearLayer(2, 2),
+        SigmoidLayer(),
+        LinearLayer(2, 2),
+        ReLULayer(),
+        LinearLayer(2, 2),
+        SoftmaxLayer()
+    )
+    optimizer4 = SGDOptimizer(model4.parameters(), lr=lr)
+    history4 = train(train_loader, model4, criterion, optimizer4, val_loader, epochs)
+    results["Two Hidden Layers with Sigmoid then ReLU"] = {
+        "train": history4["train"],
+        "val": history4["val"],
+        "model": model4
+    }
+
+    print("training model Two Hidden Layers with ReLU then Sigmoid")
+    model5 = nn.Sequential(
+        LinearLayer(2, 2),
+        ReLULayer(),
+        LinearLayer(2, 2),
+        SigmoidLayer(),
+        LinearLayer(2, 2),
+        SoftmaxLayer()
+    )
+    optimizer5 = SGDOptimizer(model5.parameters(), lr=lr)
+    history5 = train(train_loader, model5, criterion, optimizer5, val_loader, epochs)
+    results["Two Hidden Layers with ReLU then Sigmoid"] = {
+        "train": history5["train"],
+        "val": history5["val"],
+        "model": model5
+    }
 
     return results
 
@@ -155,15 +172,12 @@ def accuracy_score(model, dataloader) -> float:
     """
     correct = 0
     total = 0
-    model.eval()
-    with torch.no_grad():
-        for x_batch, y_batch in dataloader:
-            outputs = model(x_batch)
-            predicted = torch.argmax(outputs, dim=1)
-            correct += (predicted == y_batch).sum().item()
-            total += y_batch.size(0)
-    model.train()
-    return correct / total
+    for x_batch, y_batch in dataloader:
+        outputs = model(x_batch)
+        preds = torch.argmax(outputs, dim=1)
+        correct += (preds == y_batch).sum().item()
+        total += y_batch.size(0)
+    return correct / total if total > 0 else 0.0
 
 
 @problem.tag("hw3-A", start_line=7)
@@ -189,41 +203,33 @@ def main():
     dataset_test = TensorDataset(torch.from_numpy(x_test).float(), torch.from_numpy(y_test))
 
     ce_configs = crossentropy_parameter_search(dataset_train, dataset_val)
-    
-    plt.figure(figsize=(8, 6))
-    for name, info in ce_configs.items():
-        train_loss = info["train"]
-        val_loss = info["val"]
-        epochs = range(len(train_loss))
-        plt.plot(epochs, train_loss, label=f"{name} Train")
-        plt.plot(epochs, val_loss, label=f"{name} Val", linestyle="--")
-    plt.xlabel("Epoch")
-    plt.ylabel("Cross-Entropy Loss")
-    plt.title("Cross-Entropy Training vs. Validation Loss")
-    plt.legend()
+    plt.figure()
+    for name, config in ce_configs.items():
+        epochs_range = range(len(config["train"]))
+        plt.plot(epochs_range, config["train"], label=name + " Train")
+        plt.plot(epochs_range, config["val"], label=name + " Val")
+    plt.xlabel("Epochs")
+    plt.ylabel("Crossentropy Loss")
+    plt.title("All Models: Crossentropy Loss")
+    plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left", borderaxespad=0)
     plt.show()
 
     best_model_name = None
-    best_model_state = None
-    best_val = float("inf")
-    for name, info in ce_configs.items():
-        min_val_loss = min(info["val"])
-        if min_val_loss < best_val:
-            best_val = min_val_loss
-            best_model_name = name
-            best_model_state = info["model"].state_dict()
+    best_val_loss = float("inf")
+    for name, config in ce_configs.items():
+        if config["val"]:
+            min_val = min(config["val"])
+            if min_val < best_val_loss:
+                best_val_loss = min_val
+                best_model_name = name
 
+    print("Best model based on validation loss: {} with loss {:.4f}".format(best_model_name, best_val_loss))
     best_model = ce_configs[best_model_name]["model"]
-    best_model.load_state_dict(best_model_state)
 
-    test_loader = DataLoader(dataset_test, batch_size=8, shuffle=False)
-    plot_model_guesses(test_loader, best_model, title=f"Best Model: {best_model_name}")
-
-    test_accuracy = accuracy_score(best_model, test_loader)
-    print(f"Best model: {best_model_name}")
-    print(f"Best validation loss: {best_val:.4f}")
-    print(f"Test accuracy: {test_accuracy:.2%}")
-
+    test_loader = DataLoader(dataset_test, batch_size=16, shuffle=False)
+    plot_model_guesses(test_loader, best_model, title="Best Model Guesses")
+    acc = accuracy_score(best_model, test_loader)
+    print("Test set accuracy: {:.4f}".format(acc))
 
 if __name__ == "__main__":
     main()
